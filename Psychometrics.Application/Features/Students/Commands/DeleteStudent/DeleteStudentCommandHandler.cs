@@ -8,39 +8,39 @@ using Psychometrics.Application.Exceptions;
 namespace Psychometrics.Application.Features.Students.Commands.DeleteStudent
 {
     /// <summary>
-    /// Handler for processing DeleteStudentCommand requests.
+    /// Handler for deleting a Student
     /// </summary>
-    public class DeleteStudentCommandHandler : IRequestHandler<DeleteStudentCommand>
+    public class DeleteStudentCommandHandler : IRequestHandler<DeleteStudentCommand, bool>
     {
         private readonly IApplicationDbContext _context;
 
         /// <summary>
-        /// Initializes a new instance of the DeleteStudentCommandHandler class.
+        /// Initializes a new instance of the DeleteStudentCommandHandler class
         /// </summary>
-        /// <param name="context">The application database context.</param>
+        /// <param name="context">The application database context</param>
         public DeleteStudentCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
         /// <summary>
-        /// Handles the deletion of an existing Student.
+        /// Handles the request to delete a Student
         /// </summary>
-        /// <param name="request">The command containing the ID of the Student to delete.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Unit value indicating completion.</returns>
-        public async Task<Unit> Handle(DeleteStudentCommand request, CancellationToken cancellationToken)
+        /// <param name="request">The command request</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>True if the Student was deleted, false otherwise</returns>
+        public async Task<bool> Handle(DeleteStudentCommand request, CancellationToken cancellationToken)
         {
-            var student = await _context.Students.FindAsync(request.Id);
-            if (student == null)
-            {
-                return Unit.Value;
-            }
+            var entity = await _context.Students
+                .FirstOrDefaultAsync(x => x.StudentID == request.StudentID, cancellationToken);
 
-            _context.Students.Remove(student);
+            if (entity == null)
+                return false;
+
+            _context.Students.Remove(entity);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return true;
         }
     }
 } 

@@ -3,14 +3,34 @@ using System;
 
 namespace Psychometrics.Application.Features.Items.Commands.UpdateItem
 {
-    public class UpdateItemCommand : IRequest
+    /// <summary>
+    /// Command to update an Item
+    /// </summary>
+    public class UpdateItemCommand : IRequest<bool>
     {
-        public Guid Id { get; set; }
-        public string Text { get; set; }
-        public string Description { get; set; }
-        public Guid ItemGroupId { get; set; }
-        public Guid? ItemSubGroupId { get; set; }
-        public int Order { get; set; }
-        public bool IsActive { get; set; }
+        /// <summary>
+        /// Gets or sets the ID of the Item to update
+        /// </summary>
+        public Guid ItemID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the code of the Item
+        /// </summary>
+        public string Code { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the MSCAA ID of the Item
+        /// </summary>
+        public string MSCAAID { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the ItemSubGroup code
+        /// </summary>
+        public string ItemSubGroupCode { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the ItemGroup code
+        /// </summary>
+        public string ItemGroupCode { get; set; } = string.Empty;
     }
 } 

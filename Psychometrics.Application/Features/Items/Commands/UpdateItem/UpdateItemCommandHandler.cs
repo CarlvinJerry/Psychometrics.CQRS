@@ -9,46 +9,44 @@ using Psychometrics.Application.Exceptions;
 namespace Psychometrics.Application.Features.Items.Commands.UpdateItem
 {
     /// <summary>
-    /// Handler for processing UpdateItemCommand requests.
+    /// Handler for updating an Item
     /// </summary>
-    public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand>
+    public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, bool>
     {
         private readonly IApplicationDbContext _context;
 
         /// <summary>
-        /// Initializes a new instance of the UpdateItemCommandHandler class.
+        /// Initializes a new instance of the UpdateItemCommandHandler class
         /// </summary>
-        /// <param name="context">The application database context.</param>
+        /// <param name="context">The application database context</param>
         public UpdateItemCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
         /// <summary>
-        /// Handles the update of an existing Item.
+        /// Handles the request to update an Item
         /// </summary>
-        /// <param name="request">The command containing the updated Item details.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Unit value indicating completion.</returns>
-        public async Task<Unit> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+        /// <param name="request">The command request</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>True if the Item was updated, false otherwise</returns>
+        public async Task<bool> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
         {
-            var item = await _context.Items.FindAsync(request.Id);
-            if (item == null)
-            {
-                return Unit.Value;
-            }
+            var entity = await _context.Items
+                .FirstOrDefaultAsync(x => x.ItemID == request.ItemID, cancellationToken);
 
-            item.Text = request.Text;
-            item.Description = request.Description;
-            item.ItemGroupId = request.ItemGroupId;
-            item.ItemSubGroupId = request.ItemSubGroupId;
-            item.Order = request.Order;
-            item.IsActive = request.IsActive;
-            item.UpdatedAt = DateTime.UtcNow;
+            if (entity == null)
+                return false;
+
+            entity.Code = request.Code;
+            entity.MSCAAID = request.MSCAAID;
+            entity.ItemSubGroupCode = request.ItemSubGroupCode;
+            entity.ItemGroupCode = request.ItemGroupCode;
+            entity.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return true;
         }
     }
 } 

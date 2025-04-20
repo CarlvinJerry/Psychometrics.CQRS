@@ -3,8 +3,14 @@ using System;
 
 namespace Psychometrics.Application.Features.Students.Commands.DeleteStudent
 {
-    public class DeleteStudentCommand : IRequest
+    /// <summary>
+    /// Command to delete a Student
+    /// </summary>
+    public class DeleteStudentCommand : IRequest<bool>
     {
-        public Guid Id { get; set; }
+        /// <summary>
+        /// Gets or sets the ID of the Student to delete
+        /// </summary>
+        public Guid StudentID { get; set; }
     }
 } 

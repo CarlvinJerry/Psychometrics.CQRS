@@ -9,52 +9,64 @@ using Psychometrics.Domain.Entities;
 using Psychometrics.Application.Interfaces;
 using Psychometrics.Application.Exceptions;
 
-namespace Psychometrics.Application.Features.Responses.Commands.CreateResponse
+namespace Psychometrics.Application.Features.ItemResponses.Commands.CreateResponse;
+
+/// <summary>
+/// Handler for creating a new ItemResponse
+/// </summary>
+public class CreateResponseCommandHandler : IRequestHandler<CreateResponseCommand, Guid>
 {
-    public class CreateResponseCommandHandler : IRequestHandler<CreateResponseCommand, Guid>
+    private readonly IApplicationDbContext _context;
+
+    /// <summary>
+    /// Initializes a new instance of the CreateResponseCommandHandler class
+    /// </summary>
+    /// <param name="context">The application database context</param>
+    public CreateResponseCommandHandler(IApplicationDbContext context)
     {
-        private readonly IApplicationDbContext _context;
+        _context = context;
+    }
 
-        public CreateResponseCommandHandler(IApplicationDbContext context)
+    /// <summary>
+    /// Handles the request to create a new ItemResponse
+    /// </summary>
+    /// <param name="request">The command request</param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>The ID of the newly created ItemResponse</returns>
+    public async Task<Guid> Handle(CreateResponseCommand request, CancellationToken cancellationToken)
+    {
+        // Validate that Student exists
+        var student = await _context.Students
+            .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
+        if (student == null)
         {
-            _context = context;
+            throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
-        public async Task<Guid> Handle(CreateResponseCommand request, CancellationToken cancellationToken)
+        // Validate that Item exists
+        var item = await _context.Items
+            .FirstOrDefaultAsync(i => i.Id == request.ItemId, cancellationToken);
+        if (item == null)
         {
-            // Validate that Student exists
-            var student = await _context.Students
-                .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
-            if (student == null)
-            {
-                throw new NotFoundException(nameof(Student), request.StudentId);
-            }
-
-            // Validate that Item exists
-            var item = await _context.Items
-                .FirstOrDefaultAsync(i => i.Id == request.ItemId, cancellationToken);
-            if (item == null)
-            {
-                throw new NotFoundException(nameof(Item), request.ItemId);
-            }
-
-            var response = new Response
-            {
-                Id = Guid.NewGuid(),
-                StudentId = request.StudentId,
-                ItemId = request.ItemId,
-                SelectedAnswer = request.SelectedAnswer,
-                IsCorrect = request.IsCorrect,
-                ResponseTime = request.ResponseTime,
-                CreatedAt = DateTime.UtcNow,
-                Student = student,
-                Item = item
-            };
-
-            _context.Responses.Add(response);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return response.Id;
+            throw new NotFoundException(nameof(Item), request.ItemId);
         }
+
+        var response = new Response
+        {
+            Id = Guid.NewGuid(),
+            StudentId = request.StudentId,
+            ItemId = request.ItemId,
+            SelectedAnswer = request.SelectedAnswer,
+            IsCorrect = request.IsCorrect,
+            ResponseTime = request.ResponseTime,
+            CreatedAt = DateTime.UtcNow,
+            Student = student,
+            Item = item
+        };
+
+        _context.Responses.Add(response);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return response.Id;
     }
 } 

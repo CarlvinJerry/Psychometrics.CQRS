@@ -10,21 +10,31 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Commands.CreateItemSu
     /// <summary>
     /// Command to create a new ItemSubGroup.
     /// </summary>
-    public class CreateItemSubGroupCommand : IRequest<int>
+    public class CreateItemSubGroupCommand : IRequest<Guid>
     {
         /// <summary>
         /// Gets or sets the name of the ItemSubGroup.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the description of the ItemSubGroup.
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the ID of the parent ItemGroup.
+        /// Gets or sets the code of the ItemSubGroup.
         /// </summary>
-        public int ItemGroupId { get; set; }
+        public string Code { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the ItemGroup code.
+        /// </summary>
+        public string ItemGroupCode { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the ItemSubGroupType code.
+        /// </summary>
+        public string ItemSubGroupTypeCode { get; set; } = string.Empty;
     }
 } 

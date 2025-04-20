@@ -9,47 +9,43 @@ using Psychometrics.Application.Exceptions;
 namespace Psychometrics.Application.Features.Students.Commands.UpdateStudent
 {
     /// <summary>
-    /// Handler for processing UpdateStudentCommand requests.
+    /// Handler for updating a Student
     /// </summary>
-    public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand>
+    public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand, bool>
     {
         private readonly IApplicationDbContext _context;
 
         /// <summary>
-        /// Initializes a new instance of the UpdateStudentCommandHandler class.
+        /// Initializes a new instance of the UpdateStudentCommandHandler class
         /// </summary>
-        /// <param name="context">The application database context.</param>
+        /// <param name="context">The application database context</param>
         public UpdateStudentCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
         /// <summary>
-        /// Handles the update of an existing Student.
+        /// Handles the request to update a Student
         /// </summary>
-        /// <param name="request">The command containing the updated Student details.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A Unit value indicating completion.</returns>
-        public async Task<Unit> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
+        /// <param name="request">The command request</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>True if the Student was updated, false otherwise</returns>
+        public async Task<bool> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
         {
-            var student = await _context.Students.FindAsync(request.Id);
-            if (student == null)
-            {
-                return Unit.Value;
-            }
+            var entity = await _context.Students
+                .FirstOrDefaultAsync(x => x.StudentID == request.StudentID, cancellationToken);
 
-            student.FirstName = request.FirstName;
-            student.LastName = request.LastName;
-            student.Email = request.Email;
-            student.PhoneNumber = request.PhoneNumber;
-            student.DateOfBirth = request.DateOfBirth;
-            student.Gender = request.Gender;
-            student.StudentNumber = request.StudentNumber;
-            student.UpdatedAt = DateTime.UtcNow;
+            if (entity == null)
+                return false;
+
+            entity.FirstName = request.FirstName;
+            entity.LastName = request.LastName;
+            entity.Email = request.Email;
+            entity.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return true;
         }
     }
 } 
