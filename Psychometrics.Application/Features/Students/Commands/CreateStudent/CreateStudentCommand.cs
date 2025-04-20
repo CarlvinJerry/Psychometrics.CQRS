@@ -1,0 +1,16 @@
+using System;
+using MediatR;
+
+namespace Psychometrics.Application.Features.Students.Commands.CreateStudent
+{
+    public class CreateStudentCommand : IRequest<Guid>
+    {
+        public required string StudentNumber { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public required string Gender { get; set; }
+    }
+} 
