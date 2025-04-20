@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Psychometrics.Application.Common.Interfaces;
+using Psychometrics.Application.Interfaces;
 using Psychometrics.Domain.Entities;
 
 namespace Psychometrics.Application.Features.ItemGroups.Commands.CreateItemGroup
@@ -18,17 +18,18 @@ namespace Psychometrics.Application.Features.ItemGroups.Commands.CreateItemGroup
 
         public async Task<Guid> Handle(CreateItemGroupCommand request, CancellationToken cancellationToken)
         {
-            var entity = new ItemGroup
+            var itemGroup = new ItemGroup
             {
+                Id = Guid.NewGuid(),
                 Name = request.Name,
                 Description = request.Description,
                 CreatedAt = DateTime.UtcNow
             };
 
-            _context.ItemGroups.Add(entity);
+            _context.ItemGroups.Add(itemGroup);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return entity.Id;
+            return itemGroup.Id;
         }
     }
 } 
