@@ -1,38 +1,45 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Psychometrics.Application.Interfaces;
+using Psychometrics.Application.Common.Interfaces;
+using Psychometrics.Application.Common.Models;
 
 namespace Psychometrics.Application.Features.ItemSubGroupTypes.Queries.GetItemSubGroupTypeById
 {
+    /// <summary>
+    /// Handler for the GetItemSubGroupTypeByIdQuery
+    /// </summary>
     public class GetItemSubGroupTypeByIdQueryHandler : IRequestHandler<GetItemSubGroupTypeByIdQuery, ItemSubGroupTypeDto>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GetItemSubGroupTypeByIdQueryHandler(IApplicationDbContext context)
+        /// <summary>
+        /// Initializes a new instance of the GetItemSubGroupTypeByIdQueryHandler class
+        /// </summary>
+        /// <param name="context">The application database context</param>
+        /// <param name="mapper">The AutoMapper instance</param>
+        public GetItemSubGroupTypeByIdQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
+        /// <summary>
+        /// Handles the GetItemSubGroupTypeByIdQuery request
+        /// </summary>
+        /// <param name="request">The query request containing the ItemSubGroupType ID</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The ItemSubGroupTypeDto if found, null otherwise</returns>
         public async Task<ItemSubGroupTypeDto> Handle(GetItemSubGroupTypeByIdQuery request, CancellationToken cancellationToken)
         {
-            var itemSubGroupType = await _context.ItemSubGroupTypes
-                .FirstOrDefaultAsync(ist => ist.ItemSubGroupTypeID == request.Id, cancellationToken);
+            var entity = await _context.ItemSubGroupTypes
+                .FirstOrDefaultAsync(x => x.ItemSubGroupTypeID == request.ItemSubGroupTypeID, cancellationToken);
 
-            if (itemSubGroupType == null)
-            {
-                throw new Exception($"ItemSubGroupType with ID {request.Id} not found.");
-            }
-
-            return new ItemSubGroupTypeDto
-            {
-                ItemSubGroupTypeID = itemSubGroupType.ItemSubGroupTypeID,
-                Code = itemSubGroupType.Code,
-                Name = itemSubGroupType.Name,
-                Description = itemSubGroupType.Description
-            };
+            return entity != null ? _mapper.Map<ItemSubGroupTypeDto>(entity) : null;
         }
     }
 } 

@@ -9,15 +9,28 @@ using Psychometrics.Application.Common.Models;
 
 namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSubGroups
 {
+    /// <summary>
+    /// Handler for processing GetAllItemSubGroupsQuery requests.
+    /// </summary>
     public class GetAllItemSubGroupsQueryHandler : IRequestHandler<GetAllItemSubGroupsQuery, PaginatedList<ItemSubGroupDto>>
     {
         private readonly IApplicationDbContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the GetAllItemSubGroupsQueryHandler class.
+        /// </summary>
+        /// <param name="context">The application database context.</param>
         public GetAllItemSubGroupsQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Handles the retrieval of a paginated list of ItemSubGroups with optional filtering and sorting.
+        /// </summary>
+        /// <param name="request">The query containing filtering, sorting, and pagination parameters.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A paginated list of ItemSubGroupDto objects.</returns>
         public async Task<PaginatedList<ItemSubGroupDto>> Handle(GetAllItemSubGroupsQuery request, CancellationToken cancellationToken)
         {
             var query = _context.ItemSubGroups
