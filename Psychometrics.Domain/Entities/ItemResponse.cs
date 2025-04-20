@@ -4,16 +4,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Psychometrics.Domain.Entities
 {
-    public class Response
+    public class ItemResponse
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ResponseId { get; set; }
+        public Guid ItemResponseID { get; set; }
 
         [Required(ErrorMessage = "item Response value is a required field.")]
         public decimal ResponseValue { get; set; }
 
         public int Id { get; set; }
+
+        [MaxLength(50, ErrorMessage = "Maximum length for MSCAAID is 50 characters.")]
+        public string? MSCAAID { get; set; }
 
         [ForeignKey("StudentId")]
         public virtual Student? Students { get; set; }

@@ -18,6 +18,9 @@ namespace Psychometrics.Domain.Entities
         [MaxLength(60, ErrorMessage = "Maximum length for the Name is 60 characters.")]
         public string? Name { get; set; }
 
+        [MaxLength(50, ErrorMessage = "Maximum length for MSCAAID is 50 characters.")]
+        public string? MSCAAID { get; set; }
+
         [ForeignKey("ItemSubGroupID")]
         public virtual ItemSubGroup? ItemSubGroups { get; set; }
         public Guid ItemSubGroupID { get; set; }
@@ -27,6 +30,6 @@ namespace Psychometrics.Domain.Entities
 
         // Navigation properties
         public required ItemGroup ItemGroup { get; set; }
-        public ICollection<Response> Responses { get; set; } = new List<Response>();
+        public ICollection<ItemResponse> ItemResponses { get; set; } = new List<ItemResponse>();
     }
 } 
