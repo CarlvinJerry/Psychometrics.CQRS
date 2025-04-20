@@ -12,7 +12,8 @@ namespace Psychometrics.Domain.Entities
 
         [Required(ErrorMessage = "ItemSubGroupType Code is a required field.")]
         [MaxLength(50, ErrorMessage = "Maximum length for the Code is 50 characters.")]
-        public string? Code { get; set; }
+        [Key]
+        public string Code { get; set; }
 
         [MaxLength(60, ErrorMessage = "Maximum length for the Name is 60 characters.")]
         public string? Name { get; set; }

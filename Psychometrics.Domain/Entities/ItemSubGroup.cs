@@ -15,20 +15,27 @@ namespace Psychometrics.Domain.Entities
         [MaxLength(50, ErrorMessage = "Maximum length for Item Type Name is 60 characters.")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Item Group Code is a required field.")]
+        [Required(ErrorMessage = "Item SubGroup Code is a required field.")]
         [MaxLength(50, ErrorMessage = "Maximum length for Item Type Name is 60 characters.")]
+        [Key]
         public string Code { get; set; }
 
         [MaxLength(60, ErrorMessage = "Maximum length for the Name is 200 characters.")]
         public string? Description { get; set; }
 
-        [ForeignKey("ItemGroupID")]
-        public virtual ItemGroup? ItemGroups { get; set; }
-        public Guid ItemGroupID { get; set; }
+        [Required(ErrorMessage = "Item Group Code is required.")]
+        [MaxLength(50)]
+        public string ItemGroupCode { get; set; }
 
-        [ForeignKey("ItemSubGroupTypeID")]
-        public virtual ItemSubGroupType? ItemSubGroupTypes { get; set; }
-        public Guid ItemSubGroupTypeID { get; set; }
+        [ForeignKey("ItemGroupCode")]
+        public virtual ItemGroup? ItemGroup { get; set; }
+
+        [Required(ErrorMessage = "Item SubGroup Type Code is required.")]
+        [MaxLength(50)]
+        public string ItemSubGroupTypeCode { get; set; }
+
+        [ForeignKey("ItemSubGroupTypeCode")]
+        public virtual ItemSubGroupType? ItemSubGroupType { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
