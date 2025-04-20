@@ -13,18 +13,21 @@ namespace Psychometrics.Domain.Entities
         [Required(ErrorMessage = "item Response value is a required field.")]
         public decimal ResponseValue { get; set; }
 
-        public int Id { get; set; }
-
         [MaxLength(50, ErrorMessage = "Maximum length for MSCAAID is 50 characters.")]
         public string? MSCAAID { get; set; }
 
-        [ForeignKey("StudentId")]
-        public virtual Student? Students { get; set; }
-        public Guid StudentId { get; set; }
+        [Required(ErrorMessage = "Student Candidate Number is required.")]
+        public int StudentCandidateNumber { get; set; }
 
-        [ForeignKey("ItemID")]
-        public virtual Item? Items { get; set; }
-        public Guid ItemID { get; set; }
+        [ForeignKey("StudentCandidateNumber")]
+        public virtual Student? Student { get; set; }
+
+        [Required(ErrorMessage = "Item Code is required.")]
+        [MaxLength(50)]
+        public string ItemCode { get; set; }
+
+        [ForeignKey("ItemCode")]
+        public virtual Item? Item { get; set; }
 
         public int CalendarYear { get; set; }
 
