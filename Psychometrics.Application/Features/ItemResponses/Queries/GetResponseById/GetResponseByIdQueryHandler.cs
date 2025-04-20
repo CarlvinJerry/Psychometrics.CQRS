@@ -1,37 +1,39 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
-using Psychometrics.Application.Exceptions;
 
-namespace Psychometrics.Application.Features.Responses.Queries.GetResponseById
+namespace Psychometrics.Application.Features.ItemResponses.Queries.GetResponseById
 {
     public class GetResponseByIdQueryHandler : IRequestHandler<GetResponseByIdQuery, ResponseDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IMapper _mapper;
 
-        public GetResponseByIdQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetResponseByIdQueryHandler(IApplicationDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<ResponseDto> Handle(GetResponseByIdQuery request, CancellationToken cancellationToken)
         {
             var response = await _context.Responses
-                .Include(r => r.Student)
-                .Include(r => r.Item)
-                .FirstOrDefaultAsync(r => r.Id == request.Id, cancellationToken);
+                .FirstOrDefaultAsync(r => r.ResponseId == request.ResponseId, cancellationToken);
 
             if (response == null)
             {
-                throw new NotFoundException(nameof(response), request.Id);
+                return null;
             }
 
-            return _mapper.Map<ResponseDto>(response);
+            return new ResponseDto
+            {
+                ResponseId = response.ResponseId,
+                ItemId = response.ItemId,
+                StudentId = response.StudentId,
+                ResponseValue = response.ResponseValue,
+                ResponseTime = response.ResponseTime
+            };
         }
     }
 } 

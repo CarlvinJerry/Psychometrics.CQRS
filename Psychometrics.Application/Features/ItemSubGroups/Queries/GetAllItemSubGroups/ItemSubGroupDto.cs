@@ -10,27 +10,32 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSub
         /// <summary>
         /// Gets or sets the unique identifier of the ItemSubGroup.
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid ItemSubGroupID { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the ItemSubGroup.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the description of the ItemSubGroup.
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the ID of the parent ItemGroup.
+        /// Gets or sets the code of the ItemSubGroup.
         /// </summary>
-        public Guid ItemGroupId { get; set; }
+        public string Code { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the ItemGroup code.
+        /// </summary>
+        public string ItemGroupCode { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the name of the parent ItemGroup.
         /// </summary>
-        public string ItemGroupName { get; set; }
+        public string ItemGroupName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the creation timestamp of the ItemSubGroup.

@@ -1,37 +1,45 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
-using Psychometrics.Domain.Entities;
-using Psychometrics.Application.Common.Exceptions;
 
 namespace Psychometrics.Application.Features.Students.Queries.GetStudentById
 {
     public class GetStudentByIdQueryHandler : IRequestHandler<GetStudentByIdQuery, StudentDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IMapper _mapper;
 
-        public GetStudentByIdQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetStudentByIdQueryHandler(IApplicationDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<StudentDto> Handle(GetStudentByIdQuery request, CancellationToken cancellationToken)
         {
             var student = await _context.Students
-                .FirstOrDefaultAsync(s => s.CandidateNumber == request.CandidateNumber, cancellationToken);
+                .FirstOrDefaultAsync(s => s.StudentId == request.StudentId, cancellationToken);
 
             if (student == null)
             {
-                throw new NotFoundException(nameof(Student), request.CandidateNumber);
+                return null;
             }
 
-            return _mapper.Map<StudentDto>(student);
+            return new StudentDto
+            {
+                StudentId = student.StudentId,
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                Email = student.Email,
+                PhoneNumber = student.PhoneNumber,
+                DateOfBirth = student.DateOfBirth,
+                Gender = student.Gender,
+                Address = student.Address,
+                City = student.City,
+                Country = student.Country,
+                PostalCode = student.PostalCode
+            };
         }
     }
 } 
