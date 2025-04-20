@@ -10,22 +10,22 @@ namespace Psychometrics.Application.Features.ItemSubGroupTypes.Queries.GetAllIte
         /// <summary>
         /// Gets or sets the unique identifier of the ItemSubGroupType.
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid ItemSubGroupTypeID { get; set; }
 
         /// <summary>
         /// Gets or sets the code of the ItemSubGroupType.
         /// </summary>
-        public string Code { get; set; }
+        public string Code { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the name of the ItemSubGroupType.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description of the ItemSubGroupType.
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// Gets or sets the creation timestamp of the ItemSubGroupType.

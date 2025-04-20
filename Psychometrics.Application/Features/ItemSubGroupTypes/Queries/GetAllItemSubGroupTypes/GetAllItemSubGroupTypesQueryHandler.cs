@@ -29,7 +29,7 @@ namespace Psychometrics.Application.Features.ItemSubGroupTypes.Queries.GetAllIte
         }
 
         /// <summary>
-        /// Handles the GetAllItemSubGroupTypesQuery request
+        /// Handles the request to retrieve all ItemSubGroupTypes
         /// </summary>
         /// <param name="request">The query request</param>
         /// <param name="cancellationToken">The cancellation token</param>
