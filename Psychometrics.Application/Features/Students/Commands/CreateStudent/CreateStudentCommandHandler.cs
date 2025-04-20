@@ -1,9 +1,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Psychometrics.Application.Common.Interfaces;
 using Psychometrics.Domain.Entities;
-using Psychometrics.Application.Interfaces;
 
 namespace Psychometrics.Application.Features.Students.Commands.CreateStudent
 {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Psychometrics.Application.Interfaces;
+using Psychometrics.Application.Common.Interfaces;
 using Psychometrics.Application.Exceptions;
 
 namespace Psychometrics.Application.Features.Responses.Queries.GetResponseById

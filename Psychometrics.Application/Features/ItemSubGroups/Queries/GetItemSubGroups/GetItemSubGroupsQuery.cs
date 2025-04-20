@@ -5,6 +5,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
+using Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSubGroups;
 
 namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetItemSubGroups
 {

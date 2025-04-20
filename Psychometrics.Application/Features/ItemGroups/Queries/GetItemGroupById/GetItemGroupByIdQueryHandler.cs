@@ -1,9 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Psychometrics.Application.Interfaces;
+using Psychometrics.Application.Common.Interfaces;
 using System.Linq;
 
 namespace Psychometrics.Application.Features.ItemGroups.Queries.GetItemGroupById
