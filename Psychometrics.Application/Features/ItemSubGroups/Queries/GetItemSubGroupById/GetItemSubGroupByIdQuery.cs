@@ -18,7 +18,7 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetItemSubGro
         /// <summary>
         /// Gets or sets the ID of the ItemSubGroup to retrieve.
         /// </summary>
-        public int Id { get; set; }
+        public Guid ItemSubGroupID { get; set; }
     }
 
     /// <summary>
@@ -51,11 +51,11 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetItemSubGro
         {
             var itemSubGroup = await _context.ItemSubGroups
                 .Include(isg => isg.ItemGroup)
-                .FirstOrDefaultAsync(isg => isg.Id == request.Id, cancellationToken);
+                .FirstOrDefaultAsync(isg => isg.Id == request.ItemSubGroupID, cancellationToken);
 
             if (itemSubGroup == null)
             {
-                throw new NotFoundException(nameof(itemSubGroup), request.Id);
+                throw new NotFoundException(nameof(itemSubGroup), request.ItemSubGroupID);
             }
 
             return _mapper.Map<ItemSubGroupDto>(itemSubGroup);

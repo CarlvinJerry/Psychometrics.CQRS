@@ -6,8 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
 using Psychometrics.Domain.Entities;
-using Psychometrics.Application.Interfaces;
-using Psychometrics.Application.Exceptions;
+using Psychometrics.Application.Common.Exceptions;
 
 namespace Psychometrics.Application.Features.ItemResponses.Commands.CreateResponse;
 
@@ -37,36 +36,37 @@ public class CreateResponseCommandHandler : IRequestHandler<CreateResponseComman
     {
         // Validate that Student exists
         var student = await _context.Students
-            .FirstOrDefaultAsync(s => s.Id == request.StudentId, cancellationToken);
+            .FirstOrDefaultAsync(s => s.CandidateNumber == request.StudentCandidateNumber, cancellationToken);
         if (student == null)
         {
-            throw new NotFoundException(nameof(Student), request.StudentId);
+            throw new NotFoundException(nameof(Student), request.StudentCandidateNumber);
         }
 
         // Validate that Item exists
         var item = await _context.Items
-            .FirstOrDefaultAsync(i => i.Id == request.ItemId, cancellationToken);
+            .FirstOrDefaultAsync(i => i.Code == request.ItemCode, cancellationToken);
         if (item == null)
         {
-            throw new NotFoundException(nameof(Item), request.ItemId);
+            throw new NotFoundException(nameof(Item), request.ItemCode);
         }
 
-        var response = new Response
+        var response = new ItemResponse
         {
-            Id = Guid.NewGuid(),
-            StudentId = request.StudentId,
-            ItemId = request.ItemId,
-            SelectedAnswer = request.SelectedAnswer,
-            IsCorrect = request.IsCorrect,
-            ResponseTime = request.ResponseTime,
+            ItemResponseID = Guid.NewGuid(),
+            StudentCandidateNumber = request.StudentCandidateNumber,
+            ItemCode = request.ItemCode,
+            ResponseValue = request.ResponseValue,
+            MSCAAID = request.MSCAAID,
             CreatedAt = DateTime.UtcNow,
             Student = student,
-            Item = item
+            Item = item,
+            CalendarYear = DateTime.UtcNow.Year,
+            TeachingPeriod = (DateTime.UtcNow.Month <= 6) ? 1 : 2
         };
 
-        _context.Responses.Add(response);
+        _context.ItemResponses.Add(response);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return response.Id;
+        return response.ItemResponseID;
     }
-} 
+}

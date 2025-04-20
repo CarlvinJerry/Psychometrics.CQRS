@@ -1,6 +1,6 @@
 using AutoMapper;
 using Psychometrics.Domain.Entities;
-using Psychometrics.Application.Features.Responses.Queries.GetResponseById;
+using Psychometrics.Application.Features.ItemResponses.Queries.GetItemResponseById;
 
 namespace Psychometrics.Application.Common.Mappings
 {
@@ -8,18 +8,16 @@ namespace Psychometrics.Application.Common.Mappings
     {
         public ResponseMappingProfile()
         {
-            CreateMap<Response, ResponseDto>()
+            CreateMap<ItemResponse, ItemResponseDto>()
                 .ForMember(d => d.Student, opt => opt.MapFrom(s => new StudentBriefDto
                 {
-                    Id = s.Student.Id,
-                    StudentNumber = s.Student.StudentNumber,
-                    FullName = $"{s.Student.FirstName} {s.Student.LastName}"
+                    CandidateNumber = s.StudentCandidateNumber,
+                    FullName = $"{s.Student.FirstName} {s.Student.Surname}"
                 }))
                 .ForMember(d => d.Item, opt => opt.MapFrom(s => new ItemBriefDto
                 {
-                    Id = s.Item.Id,
-                    ItemCode = s.Item.ItemCode,
-                    Question = s.Item.Question
+                    Code = s.ItemCode,
+                    Name = s.Item.Name
                 }));
         }
     }

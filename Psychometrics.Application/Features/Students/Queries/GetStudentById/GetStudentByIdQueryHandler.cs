@@ -1,10 +1,12 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
-using Psychometrics.Application.Exceptions;
+using Psychometrics.Domain.Entities;
+using Psychometrics.Application.Common.Exceptions;
 
 namespace Psychometrics.Application.Features.Students.Queries.GetStudentById
 {
@@ -22,11 +24,11 @@ namespace Psychometrics.Application.Features.Students.Queries.GetStudentById
         public async Task<StudentDto> Handle(GetStudentByIdQuery request, CancellationToken cancellationToken)
         {
             var student = await _context.Students
-                .FirstOrDefaultAsync(s => s.Id == request.Id, cancellationToken);
+                .FirstOrDefaultAsync(s => s.CandidateNumber == request.CandidateNumber, cancellationToken);
 
             if (student == null)
             {
-                throw new NotFoundException(nameof(student), request.Id);
+                throw new NotFoundException(nameof(Student), request.CandidateNumber);
             }
 
             return _mapper.Map<StudentDto>(student);

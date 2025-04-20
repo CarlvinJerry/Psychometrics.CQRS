@@ -3,8 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
 using Psychometrics.Domain.Entities;
+using Psychometrics.Application.Common.Exceptions;
 
 namespace Psychometrics.Application.Features.ItemGroups.Commands.CreateItemGroup
 {
@@ -21,8 +23,9 @@ namespace Psychometrics.Application.Features.ItemGroups.Commands.CreateItemGroup
         {
             var itemGroup = new ItemGroup
             {
-                Id = Guid.NewGuid(),
+                ItemGroupID = Guid.NewGuid(),
                 Name = request.Name,
+                Code = request.Code,
                 Description = request.Description,
                 CreatedAt = DateTime.UtcNow
             };
@@ -30,7 +33,7 @@ namespace Psychometrics.Application.Features.ItemGroups.Commands.CreateItemGroup
             _context.ItemGroups.Add(itemGroup);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return itemGroup.Id;
+            return itemGroup.ItemGroupID;
         }
     }
 } 

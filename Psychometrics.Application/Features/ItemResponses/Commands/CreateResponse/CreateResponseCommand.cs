@@ -9,17 +9,22 @@ namespace Psychometrics.Application.Features.ItemResponses.Commands.CreateRespon
 public class CreateResponseCommand : IRequest<Guid>
 {
     /// <summary>
+    /// Gets or sets the Student Candidate Number
+    /// </summary>
+    public int StudentCandidateNumber { get; set; }
+
+    /// <summary>
     /// Gets or sets the Item code
     /// </summary>
     public string ItemCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the Student ID
-    /// </summary>
-    public Guid StudentId { get; set; }
-
-    /// <summary>
     /// Gets or sets the response value
     /// </summary>
-    public string Response { get; set; } = string.Empty;
+    public decimal ResponseValue { get; set; }
+
+    /// <summary>
+    /// Gets or sets the MSCAAID
+    /// </summary>
+    public string? MSCAAID { get; set; }
 } 

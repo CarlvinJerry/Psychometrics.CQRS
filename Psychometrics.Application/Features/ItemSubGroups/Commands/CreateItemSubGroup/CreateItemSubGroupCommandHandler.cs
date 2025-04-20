@@ -1,11 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
-using Psychometrics.Application.Exceptions;
 using Psychometrics.Domain.Entities;
+using Psychometrics.Application.Common.Exceptions;
 
 namespace Psychometrics.Application.Features.ItemSubGroups.Commands.CreateItemSubGroup
 {
@@ -20,28 +21,29 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Commands.CreateItemSu
 
         public async Task<Guid> Handle(CreateItemSubGroupCommand request, CancellationToken cancellationToken)
         {
-            // Verify that the ItemGroup exists
+            // Validate that ItemGroup exists
             var itemGroup = await _context.ItemGroups
-                .FirstOrDefaultAsync(ig => ig.Id == request.ItemGroupId, cancellationToken);
-
+                .FirstOrDefaultAsync(ig => ig.Code == request.ItemGroupCode, cancellationToken);
             if (itemGroup == null)
             {
-                throw new NotFoundException(nameof(ItemGroup), request.ItemGroupId);
+                throw new NotFoundException(nameof(ItemGroup), request.ItemGroupCode);
             }
 
-            var entity = new ItemSubGroup
+            var itemSubGroup = new ItemSubGroup
             {
+                ItemSubGroupID = Guid.NewGuid(),
                 Name = request.Name,
+                Code = request.Code,
                 Description = request.Description,
-                ItemGroupId = request.ItemGroupId,
-                ItemGroup = itemGroup,
+                ItemGroupCode = request.ItemGroupCode,
+                ItemSubGroupTypeCode = request.ItemSubGroupTypeCode,
                 CreatedAt = DateTime.UtcNow
             };
 
-            _context.ItemSubGroups.Add(entity);
+            _context.ItemSubGroups.Add(itemSubGroup);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return entity.Id;
+            return itemSubGroup.ItemSubGroupID;
         }
     }
 } 

@@ -1,10 +1,11 @@
 using System;
 using MediatR;
+using Psychometrics.Application.Features.ItemResponses.Queries.GetItemResponseById;
 
-namespace Psychometrics.Application.Features.Responses.Queries.GetResponseById
+namespace Psychometrics.Application.Features.ItemResponses.Queries.GetResponseById
 {
-    public class GetResponseByIdQuery : IRequest<ResponseDto>
+    public class GetResponseByIdQuery : IRequest<ItemResponseDto>
     {
-        public Guid Id { get; set; }
+        public Guid ItemResponseID { get; set; }
     }
 } 

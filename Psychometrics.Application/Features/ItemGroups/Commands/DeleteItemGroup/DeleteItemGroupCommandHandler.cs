@@ -1,9 +1,12 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
-using Psychometrics.Application.Exceptions;
+using Psychometrics.Domain.Entities;
+using Psychometrics.Application.Common.Exceptions;
 
 namespace Psychometrics.Application.Features.ItemGroups.Commands.DeleteItemGroup
 {
@@ -31,13 +34,14 @@ namespace Psychometrics.Application.Features.ItemGroups.Commands.DeleteItemGroup
         /// <returns>True if the ItemGroup was deleted, false otherwise</returns>
         public async Task<bool> Handle(DeleteItemGroupCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.ItemGroups
-                .FirstOrDefaultAsync(x => x.ItemGroupID == request.ItemGroupID, cancellationToken);
+            var itemGroup = await _context.ItemGroups.FindAsync(new object[] { request.ItemGroupID }, cancellationToken);
+            
+            if (itemGroup == null)
+            {
+                throw new NotFoundException(nameof(ItemGroup), request.ItemGroupID);
+            }
 
-            if (entity == null)
-                return false;
-
-            _context.ItemGroups.Remove(entity);
+            _context.ItemGroups.Remove(itemGroup);
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;

@@ -1,10 +1,11 @@
 using System;
 using MediatR;
+using Psychometrics.Application.Features.Students.Queries.GetAllStudents;
 
 namespace Psychometrics.Application.Features.Students.Queries.GetStudentById
 {
     public class GetStudentByIdQuery : IRequest<StudentDto>
     {
-        public Guid Id { get; set; }
+        public int CandidateNumber { get; set; }
     }
 } 

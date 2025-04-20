@@ -3,8 +3,8 @@ using System;
 
 namespace Psychometrics.Application.Features.ItemGroups.Commands.DeleteItemGroup
 {
-    public class DeleteItemGroupCommand : IRequest
+    public class DeleteItemGroupCommand : IRequest<bool>
     {
-        public Guid Id { get; set; }
+        public Guid ItemGroupID { get; set; }
     }
 } 

@@ -1,7 +1,11 @@
 using System;
 using MediatR;
+using Psychometrics.Application.Features.ItemGroups.Queries.GetAllItemGroups;
 
 namespace Psychometrics.Application.Features.ItemGroups.Queries.GetItemGroupById
 {
-    public record GetItemGroupByIdQuery(Guid Id) : IRequest<ItemGroupDto>;
+    public class GetItemGroupByIdQuery : IRequest<ItemGroupDto>
+    {
+        public Guid ItemGroupID { get; set; }
+    }
 } 
