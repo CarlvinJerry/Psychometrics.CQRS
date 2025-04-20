@@ -1,21 +1,33 @@
 using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Psychometrics.Domain.Entities
 {
     public class Response
     {
-        public Guid Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid ResponseId { get; set; }
+
+        [Required(ErrorMessage = "item Response value is a required field.")]
+        public decimal ResponseValue { get; set; }
+
+        public int Id { get; set; }
+
+        [ForeignKey("StudentId")]
+        public virtual Student? Students { get; set; }
         public Guid StudentId { get; set; }
-        public Guid ItemId { get; set; }
-        public required string SelectedAnswer { get; set; }
-        public bool IsCorrect { get; set; }
-        public DateTime ResponseTime { get; set; }
+
+        [ForeignKey("ItemID")]
+        public virtual Item? Items { get; set; }
+        public Guid ItemID { get; set; }
+
+        public int CalendarYear { get; set; }
+
+        public int TeachingPeriod { get; set; }
+
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-
-        // Navigation properties
-        public required Student Student { get; set; }
-        public required Item Item { get; set; }
     }
 } 
