@@ -12,16 +12,21 @@ namespace Psychometrics.Domain.Entities
 
         [Required(ErrorMessage = "ItemSubGroupType Code is a required field.")]
         [MaxLength(50, ErrorMessage = "Maximum length for the Code is 50 characters.")]
-        [Key]
+        [Index(IsUnique = true)]
         public string Code { get; set; }
 
         [MaxLength(60, ErrorMessage = "Maximum length for the Name is 60 characters.")]
         public string? Name { get; set; }
 
-        [MaxLength(200, ErrorMessage = "Maximum length for the Name is 60 characters.")]
+        [MaxLength(200, ErrorMessage = "Maximum length for the Description is 200 characters.")]
         public string? Description { get; set; }
+
+        public bool IsActive { get; set; } = true;
 
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
+        // Navigation properties
+        public virtual ICollection<ItemSubGroup> ItemSubGroups { get; set; } = new List<ItemSubGroup>();
     }
 } 

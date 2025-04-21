@@ -13,32 +13,35 @@ namespace Psychometrics.Domain.Entities
 
         [Required(ErrorMessage = "Item Code is a required field.")]
         [MaxLength(50, ErrorMessage = "Maximum length for the Code is 50 characters.")]
+        [Index(IsUnique = true)]
         public string Code { get; set; }
 
         [MaxLength(60, ErrorMessage = "Maximum length for the Name is 60 characters.")]
         public string? Name { get; set; }
 
-        [MaxLength(50, ErrorMessage = "Maximum length for MSCAAID is 50 characters.")]
-        public string? MSCAAID { get; set; }
+        /// <summary>
+        /// Exam unit
+        /// </summary>
+        [ForeignKey("ItemSubGroupID")]
+        public virtual ItemSubGroup? ItemSubGroups { get; set; }
+        public Guid ItemSubGroupID { get; set; }
 
-        [Required(ErrorMessage = "Item SubGroup Code is required.")]
-        [MaxLength(50)]
-        public string ItemSubGroupCode { get; set; }
+        [MaxLength(500)]
+        public string? Description { get; set; }
 
-        [ForeignKey("ItemSubGroupCode")]
-        public virtual ItemSubGroup? ItemSubGroup { get; set; }
+        [Required]
+        public Guid ItemGroupID { get; set; }
 
-        [Required(ErrorMessage = "Item Group Code is required.")]
-        [MaxLength(50)]
-        public string ItemGroupCode { get; set; }
-
-        [ForeignKey("ItemGroupCode")]
-        public virtual ItemGroup? ItemGroup { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
         // Navigation properties
-        public ICollection<ItemResponse> ItemResponses { get; set; } = new List<ItemResponse>();
+        [ForeignKey("ItemGroupID")]
+        public virtual ItemGroup ItemGroup { get; set; }
+
+        // Navigation properties
+        public virtual ICollection<ItemResponse> ItemResponses { get; set; } = new List<ItemResponse>();
     }
 } 
