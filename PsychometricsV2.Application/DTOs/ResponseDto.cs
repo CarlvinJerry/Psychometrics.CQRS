@@ -4,7 +4,7 @@ namespace PsychometricsV2.Application.DTOs;
 
 public class ResponseDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public decimal ResponseValue { get; set; }
     public int StudentId { get; set; }
     public Guid ItemId { get; set; }

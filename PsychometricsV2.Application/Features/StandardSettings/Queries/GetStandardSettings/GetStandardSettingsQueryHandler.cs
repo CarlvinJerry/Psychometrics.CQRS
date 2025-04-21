@@ -24,11 +24,20 @@ public class GetStandardSettingsQueryHandler : IRequestHandler<GetStandardSettin
             .Select(s => new StandardSettingDto
             {
                 Id = s.Id,
-                Name = s.Name,
-                Code = s.Code,
-                Description = s.Description,
-                CreatedDate = s.CreatedDate,
-                ModifiedDate = s.ModifiedDate
+                Method = s.Method,
+                RecordMonth = s.RecordMonth,
+                CalendarYear = s.CalendarYear,
+                AcademicYear = s.AcademicYear,
+                Category = s.Category,
+                Type = s.Type,
+                TeachingPeriod = s.TeachingPeriod,
+                YearLevel = s.YearLevel,
+                Phase = s.Phase,
+                PassingScore = s.PassingScore,
+                EXCScore = s.EXCScore,
+                MaxScoreRaw = s.MaxScoreRaw,
+                CreatedAt = s.CreatedAt,
+                UpdatedAt = s.UpdatedAt
             })
             .ToListAsync(cancellationToken);
     }

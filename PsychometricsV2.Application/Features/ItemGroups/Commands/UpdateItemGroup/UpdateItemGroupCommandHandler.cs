@@ -1,10 +1,15 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Linq;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PsychometricsV2.Application.Interfaces;
+using PsychometricsV2.Domain.Entities;
 
 namespace PsychometricsV2.Application.Features.ItemGroups.Commands.UpdateItemGroup;
 
-public class UpdateItemGroupCommandHandler : IRequestHandler<UpdateItemGroupCommand, bool>
+public class UpdateItemGroupCommandHandler : IRequestHandler<UpdateItemGroupCommand, Unit>
 {
     private readonly IApplicationDbContext _context;
 
@@ -13,33 +18,32 @@ public class UpdateItemGroupCommandHandler : IRequestHandler<UpdateItemGroupComm
         _context = context;
     }
 
-    public async Task<bool> Handle(UpdateItemGroupCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateItemGroupCommand request, CancellationToken cancellationToken)
     {
-        var itemGroup = await _context.ItemGroups.FindAsync(new object[] { request.Id }, cancellationToken);
+        var itemGroup = await _context.ItemGroups
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (itemGroup == null)
         {
-            return false;
+            throw new Exception($"ItemGroup with ID {request.Id} not found.");
         }
 
-        // Check if the new code already exists for a different item group
-        if (request.Code != itemGroup.Code)
-        {
-            var existingItemGroup = await _context.ItemGroups
-                .FirstOrDefaultAsync(ig => ig.Code == request.Code && ig.Id != request.Id, cancellationToken);
+        // Check if the new code is already in use by another item group
+        var existingItemGroup = await _context.ItemGroups
+            .FirstOrDefaultAsync(x => x.Code == request.Code && x.Id != request.Id, cancellationToken);
 
-            if (existingItemGroup != null)
-            {
-                throw new Exception($"ItemGroup with code {request.Code} already exists.");
-            }
+        if (existingItemGroup != null)
+        {
+            throw new Exception($"ItemGroup with code {request.Code} already exists.");
         }
 
         itemGroup.Name = request.Name;
         itemGroup.Code = request.Code;
         itemGroup.Description = request.Description;
+        itemGroup.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return true;
+        return Unit.Value;
     }
 } 

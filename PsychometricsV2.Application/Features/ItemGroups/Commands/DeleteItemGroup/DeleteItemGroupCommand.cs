@@ -1,13 +1,9 @@
+using System;
 using MediatR;
 
 namespace PsychometricsV2.Application.Features.ItemGroups.Commands.DeleteItemGroup;
 
-public class DeleteItemGroupCommand : IRequest<bool>
+public class DeleteItemGroupCommand : IRequest<Unit>
 {
-    public int Id { get; set; }
-
-    public DeleteItemGroupCommand(int id)
-    {
-        Id = id;
-    }
+    public Guid Id { get; set; }
 } 

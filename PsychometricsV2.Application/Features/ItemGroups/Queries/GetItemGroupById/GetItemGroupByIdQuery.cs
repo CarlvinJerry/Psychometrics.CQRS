@@ -7,9 +7,9 @@ namespace PsychometricsV2.Application.Features.ItemGroups.Queries.GetItemGroupBy
 
 public class GetItemGroupByIdQuery : IRequest<ItemGroupDto?>
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public GetItemGroupByIdQuery(int id)
+    public GetItemGroupByIdQuery(Guid id)
     {
         Id = id;
     }

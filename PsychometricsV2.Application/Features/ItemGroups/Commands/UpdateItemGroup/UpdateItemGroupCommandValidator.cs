@@ -13,8 +13,7 @@ public class UpdateItemGroupCommandValidator : AbstractValidator<UpdateItemGroup
         _context = context;
 
         RuleFor(v => v.Id)
-            .NotEmpty()
-            .GreaterThan(0);
+            .NotEmpty();
 
         RuleFor(v => v.Name)
             .NotEmpty()

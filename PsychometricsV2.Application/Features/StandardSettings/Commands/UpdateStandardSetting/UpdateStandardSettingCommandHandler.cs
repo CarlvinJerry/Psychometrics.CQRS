@@ -25,10 +25,19 @@ public class UpdateStandardSettingCommandHandler : IRequestHandler<UpdateStandar
             return false;
         }
 
-        standardSetting.Name = request.Name;
-        standardSetting.Code = request.Code;
-        standardSetting.Description = request.Description;
-        standardSetting.ModifiedDate = DateTime.UtcNow;
+        standardSetting.Method = request.Method;
+        standardSetting.RecordMonth = request.RecordMonth;
+        standardSetting.CalendarYear = request.CalendarYear;
+        standardSetting.AcademicYear = request.AcademicYear;
+        standardSetting.Category = request.Category;
+        standardSetting.Type = request.Type;
+        standardSetting.TeachingPeriod = request.TeachingPeriod;
+        standardSetting.YearLevel = request.YearLevel;
+        standardSetting.Phase = request.Phase;
+        standardSetting.PassingScore = request.PassingScore;
+        standardSetting.EXCScore = request.EXCScore;
+        standardSetting.MaxScoreRaw = request.MaxScoreRaw;
+        standardSetting.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync(cancellationToken);
 

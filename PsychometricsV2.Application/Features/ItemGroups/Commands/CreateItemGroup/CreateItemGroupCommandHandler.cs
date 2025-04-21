@@ -9,7 +9,7 @@ using PsychometricsV2.Domain.Entities;
 
 namespace PsychometricsV2.Application.Features.ItemGroups.Commands.CreateItemGroup;
 
-public class CreateItemGroupCommandHandler : IRequestHandler<CreateItemGroupCommand, int>
+public class CreateItemGroupCommandHandler : IRequestHandler<CreateItemGroupCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
@@ -18,13 +18,15 @@ public class CreateItemGroupCommandHandler : IRequestHandler<CreateItemGroupComm
         _context = context;
     }
 
-    public async Task<int> Handle(CreateItemGroupCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateItemGroupCommand request, CancellationToken cancellationToken)
     {
         var itemGroup = new ItemGroup
         {
+            Id = Guid.NewGuid(),
             Name = request.Name,
             Code = request.Code,
-            Description = request.Description
+            Description = request.Description,
+            CreatedAt = DateTime.UtcNow
         };
 
         _context.ItemGroups.Add(itemGroup);

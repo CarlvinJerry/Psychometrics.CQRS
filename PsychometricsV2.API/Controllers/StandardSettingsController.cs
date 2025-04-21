@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PsychometricsV2.Application.DTOs;
 using PsychometricsV2.Application.Features.StandardSettings.Commands.CreateStandardSetting;
@@ -40,7 +44,7 @@ public class StandardSettingsController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(StandardSettingDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<StandardSettingDto>> Get(int id)
+    public async Task<ActionResult<StandardSettingDto>> Get(Guid id)
     {
         var standardSetting = await _mediator.Send(new GetStandardSettingByIdQuery { Id = id });
         if (standardSetting == null)
@@ -56,9 +60,9 @@ public class StandardSettingsController : ControllerBase
     /// <param name="command">The standard setting creation command</param>
     /// <returns>The ID of the created standard setting</returns>
     [HttpPost]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<int>> Create(CreateStandardSettingCommand command)
+    public async Task<ActionResult<Guid>> Create(CreateStandardSettingCommand command)
     {
         var id = await _mediator.Send(command);
         return CreatedAtAction(nameof(Get), new { id }, id);
@@ -74,7 +78,7 @@ public class StandardSettingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(int id, UpdateStandardSettingCommand command)
+    public async Task<IActionResult> Update(Guid id, UpdateStandardSettingCommand command)
     {
         if (id != command.Id)
         {
@@ -98,7 +102,7 @@ public class StandardSettingsController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         var success = await _mediator.Send(new DeleteStandardSettingCommand { Id = id });
         if (!success)

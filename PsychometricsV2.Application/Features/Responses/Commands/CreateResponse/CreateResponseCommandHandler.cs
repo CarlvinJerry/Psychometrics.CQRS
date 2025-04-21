@@ -8,7 +8,7 @@ using PsychometricsV2.Domain.Entities;
 
 namespace PsychometricsV2.Application.Features.Responses.Commands.CreateResponse;
 
-public class CreateResponseCommandHandler : IRequestHandler<CreateResponseCommand, int>
+public class CreateResponseCommandHandler : IRequestHandler<CreateResponseCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
@@ -17,7 +17,7 @@ public class CreateResponseCommandHandler : IRequestHandler<CreateResponseComman
         _context = context;
     }
 
-    public async Task<int> Handle(CreateResponseCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateResponseCommand request, CancellationToken cancellationToken)
     {
         // Verify that the Student and Item exist
         var studentExists = await _context.Students.AnyAsync(s => s.StudentId == request.StudentId, cancellationToken);
@@ -34,12 +34,14 @@ public class CreateResponseCommandHandler : IRequestHandler<CreateResponseComman
 
         var response = new Response
         {
+            Id = Guid.NewGuid(),
             ResponseValue = request.ResponseValue,
             StudentId = request.StudentId,
             ItemId = request.ItemId,
             CalendarYear = request.CalendarYear,
             TeachingPeriod = request.TeachingPeriod,
-            MscaaId = request.MscaaId
+            MscaaId = request.MscaaId,
+            CreatedAt = DateTime.UtcNow
         };
 
         _context.Responses.Add(response);

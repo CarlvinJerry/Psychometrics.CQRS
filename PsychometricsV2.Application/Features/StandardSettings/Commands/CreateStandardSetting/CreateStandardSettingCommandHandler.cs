@@ -8,7 +8,7 @@ using PsychometricsV2.Domain.Entities;
 
 namespace PsychometricsV2.Application.Features.StandardSettings.Commands.CreateStandardSetting;
 
-public class CreateStandardSettingCommandHandler : IRequestHandler<CreateStandardSettingCommand, int>
+public class CreateStandardSettingCommandHandler : IRequestHandler<CreateStandardSettingCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
@@ -17,14 +17,24 @@ public class CreateStandardSettingCommandHandler : IRequestHandler<CreateStandar
         _context = context;
     }
 
-    public async Task<int> Handle(CreateStandardSettingCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateStandardSettingCommand request, CancellationToken cancellationToken)
     {
         var standardSetting = new StandardSetting
         {
-            Name = request.Name,
-            Code = request.Code,
-            Description = request.Description,
-            CreatedDate = DateTime.UtcNow
+            Id = Guid.NewGuid(),
+            Method = request.Method,
+            RecordMonth = request.RecordMonth,
+            CalendarYear = request.CalendarYear,
+            AcademicYear = request.AcademicYear,
+            Category = request.Category,
+            Type = request.Type,
+            TeachingPeriod = request.TeachingPeriod,
+            YearLevel = request.YearLevel,
+            Phase = request.Phase,
+            PassingScore = request.PassingScore,
+            EXCScore = request.EXCScore,
+            MaxScoreRaw = request.MaxScoreRaw,
+            CreatedAt = DateTime.UtcNow
         };
 
         _context.StandardSettings.Add(standardSetting);

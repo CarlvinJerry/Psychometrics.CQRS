@@ -3,7 +3,7 @@ using MediatR;
 
 namespace PsychometricsV2.Application.Features.Responses.Commands.CreateResponse;
 
-public class CreateResponseCommand : IRequest<int>
+public class CreateResponseCommand : IRequest<Guid>
 {
     public decimal ResponseValue { get; set; }
     public int StudentId { get; set; }
