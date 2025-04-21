@@ -1,4 +1,5 @@
 using AutoMapper;
+using Psychometrics.Application.Common.DTOs;
 using Psychometrics.Domain.Entities;
 using Psychometrics.Application.Features.Responses.Queries.GetResponseById;
 
@@ -21,6 +22,8 @@ namespace Psychometrics.Application.Common.Mappings
                     ItemCode = s.Item.ItemCode,
                     Question = s.Item.Question
                 }));
+
+            CreateMap<ResponseDto, Response>();
         }
     }
 } 
