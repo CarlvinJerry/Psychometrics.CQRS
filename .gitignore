@@ -346,9 +346,8 @@ __pycache__/
 # OpenCover UI analysis results
 OpenCover/
 
-# Azure Stream Analytics
-*.asa
-*.asql
+# Azure Stream Analytics local run output
+ASALocalRun/
 
 # MSBuild Binary and Structured Log
 *.binlog
