@@ -96,7 +96,7 @@ public class ResponsesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _mediator.Send(new DeleteResponseCommand { Id = id });
+        await _mediator.Send(new DeleteResponseCommand(id));
         return NoContent();
     }
 } 
