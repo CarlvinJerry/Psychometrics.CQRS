@@ -9,7 +9,7 @@ using PsychometricsV2.Domain.Entities;
 
 namespace PsychometricsV2.Application.Features.ItemGroups.Commands.CreateItemGroup;
 
-public class CreateItemGroupCommandHandler : IRequestHandler<CreateItemGroupCommand, Guid>
+public class CreateItemGroupCommandHandler : IRequestHandler<CreateItemGroupCommand, int>
 {
     private readonly IApplicationDbContext _context;
 
@@ -18,27 +18,16 @@ public class CreateItemGroupCommandHandler : IRequestHandler<CreateItemGroupComm
         _context = context;
     }
 
-    public async Task<Guid> Handle(CreateItemGroupCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateItemGroupCommand request, CancellationToken cancellationToken)
     {
-        // Check if an item group with the same code already exists
-        var existingItemGroup = await _context.ItemGroups
-            .FirstOrDefaultAsync(ig => ig.Code == request.Code, cancellationToken);
-
-        if (existingItemGroup != null)
-        {
-            throw new Exception($"ItemGroup with code {request.Code} already exists.");
-        }
-
         var itemGroup = new ItemGroup
         {
-            Id = Guid.NewGuid(),
-            Code = request.Code,
             Name = request.Name,
-            Description = request.Description,
-            CreatedAt = DateTime.UtcNow
+            Code = request.Code,
+            Description = request.Description
         };
 
-        await _context.ItemGroups.AddAsync(itemGroup, cancellationToken);
+        _context.ItemGroups.Add(itemGroup);
         await _context.SaveChangesAsync(cancellationToken);
 
         return itemGroup.Id;

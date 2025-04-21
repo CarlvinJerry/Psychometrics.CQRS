@@ -5,8 +5,10 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PsychometricsV2.Application.DTOs;
 using PsychometricsV2.Application.Features.ItemGroups.Commands.CreateItemGroup;
-using PsychometricsV2.Application.Features.ItemGroups.Queries.GetAllItemGroups;
+using PsychometricsV2.Application.Features.ItemGroups.Commands.DeleteItemGroup;
+using PsychometricsV2.Application.Features.ItemGroups.Commands.UpdateItemGroup;
 using PsychometricsV2.Application.Features.ItemGroups.Queries.GetItemGroupById;
+using PsychometricsV2.Application.Features.ItemGroups.Queries.GetItemGroups;
 using PsychometricsV2.Domain.Entities;
 
 namespace PsychometricsV2.API.Controllers;

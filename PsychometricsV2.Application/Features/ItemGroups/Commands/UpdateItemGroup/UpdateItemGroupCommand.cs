@@ -1,8 +1,8 @@
-using System;
+using MediatR;
 
-namespace PsychometricsV2.Application.DTOs;
+namespace PsychometricsV2.Application.Features.ItemGroups.Commands.UpdateItemGroup;
 
-public class ItemGroupDto
+public class UpdateItemGroupCommand : IRequest<bool>
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;
