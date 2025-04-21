@@ -1,3 +1,4 @@
+using System;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PsychometricsV2.Application.DTOs;
@@ -40,7 +41,7 @@ public class ResponsesController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(ResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ResponseDto>> Get(int id)
+    public async Task<ActionResult<ResponseDto>> Get(Guid id)
     {
         var response = await _mediator.Send(new GetResponseByIdQuery(id));
         if (response == null)
@@ -56,9 +57,9 @@ public class ResponsesController : ControllerBase
     /// <param name="command">The response creation command</param>
     /// <returns>The ID of the created response</returns>
     [HttpPost]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<int>> Create(CreateResponseCommand command)
+    public async Task<ActionResult<Guid>> Create(CreateResponseCommand command)
     {
         var id = await _mediator.Send(command);
         return CreatedAtAction(nameof(Get), new { id }, id);
@@ -74,19 +75,14 @@ public class ResponsesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(int id, UpdateResponseCommand command)
+    public async Task<IActionResult> Update(Guid id, UpdateResponseCommand command)
     {
         if (id != command.Id)
         {
             return BadRequest();
         }
 
-        var success = await _mediator.Send(command);
-        if (!success)
-        {
-            return NotFound();
-        }
-
+        await _mediator.Send(command);
         return NoContent();
     }
 
@@ -98,14 +94,9 @@ public class ResponsesController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var success = await _mediator.Send(new DeleteResponseCommand(id));
-        if (!success)
-        {
-            return NotFound();
-        }
-
+        await _mediator.Send(new DeleteResponseCommand { Id = id });
         return NoContent();
     }
 } 

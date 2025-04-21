@@ -4,9 +4,9 @@ namespace PsychometricsV2.Application.Features.Responses.Commands.DeleteResponse
 
 public class DeleteResponseCommand : IRequest<bool>
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public DeleteResponseCommand(int id)
+    public DeleteResponseCommand(Guid id)
     {
         Id = id;
     }

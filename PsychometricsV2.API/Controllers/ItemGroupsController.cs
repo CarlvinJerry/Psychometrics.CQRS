@@ -25,17 +25,17 @@ public class ItemGroupsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ItemGroup>>> GetAll()
+    public async Task<ActionResult<List<ItemGroupDto>>> GetAll()
     {
-        var query = new GetAllItemGroupsQuery();
+        var query = new GetItemGroupsQuery();
         var result = await _mediator.Send(query);
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ItemGroup>> GetById(Guid id)
+    public async Task<ActionResult<ItemGroupDto>> GetById(Guid id)
     {
-        var query = new GetItemGroupByIdQuery { Id = id };
+        var query = new GetItemGroupByIdQuery(id);
         var result = await _mediator.Send(query);
         
         if (result == null)

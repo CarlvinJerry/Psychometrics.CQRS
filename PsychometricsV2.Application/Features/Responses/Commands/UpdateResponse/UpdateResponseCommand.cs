@@ -5,7 +5,7 @@ namespace PsychometricsV2.Application.Features.Responses.Commands.UpdateResponse
 
 public class UpdateResponseCommand : IRequest<bool>
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public decimal ResponseValue { get; set; }
     public int StudentId { get; set; }
     public Guid ItemId { get; set; }
