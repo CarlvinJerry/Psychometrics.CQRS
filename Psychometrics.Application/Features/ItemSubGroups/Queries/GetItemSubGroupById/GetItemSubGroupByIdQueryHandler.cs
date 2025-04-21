@@ -1,9 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
+using Psychometrics.Application.Common.Exceptions;
+using Psychometrics.Domain.Entities;
 using Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSubGroups;
 
 namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetItemSubGroupById
@@ -11,31 +14,27 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetItemSubGro
     public class GetItemSubGroupByIdQueryHandler : IRequestHandler<GetItemSubGroupByIdQuery, ItemSubGroupDto>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GetItemSubGroupByIdQueryHandler(IApplicationDbContext context)
+        public GetItemSubGroupByIdQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<ItemSubGroupDto> Handle(GetItemSubGroupByIdQuery request, CancellationToken cancellationToken)
         {
             var itemSubGroup = await _context.ItemSubGroups
-                .FirstOrDefaultAsync(isg => isg.ItemSubGroupID == request.ItemSubGroupId, cancellationToken);
+                .Include(isg => isg.ItemGroup)
+                .Include(isg => isg.ItemSubGroupType)
+                .FirstOrDefaultAsync(isg => isg.ItemSubGroupID == request.ItemSubGroupID, cancellationToken);
 
             if (itemSubGroup == null)
             {
-                return null;
+                throw new NotFoundException(nameof(ItemSubGroup), request.ItemSubGroupID);
             }
 
-            return new ItemSubGroupDto
-            {
-                ItemSubGroupID = itemSubGroup.ItemSubGroupID,
-                Name = itemSubGroup.Name,
-                Description = itemSubGroup.Description,
-                Code = itemSubGroup.Code,
-                ItemGroupCode = itemSubGroup.ItemGroupCode,
-                ItemSubGroupTypeCode = itemSubGroup.ItemSubGroupTypeCode
-            };
+            return _mapper.Map<ItemSubGroupDto>(itemSubGroup);
         }
     }
 } 

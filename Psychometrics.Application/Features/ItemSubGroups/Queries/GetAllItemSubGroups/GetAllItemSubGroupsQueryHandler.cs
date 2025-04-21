@@ -35,12 +35,13 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSub
         {
             var query = _context.ItemSubGroups
                 .Include(isg => isg.ItemGroup)
+                .Include(isg => isg.ItemSubGroupType)
                 .AsQueryable();
 
             // Filter by ItemGroupId if provided
             if (request.ItemGroupId.HasValue)
             {
-                query = query.Where(isg => isg.ItemGroupId == request.ItemGroupId.Value);
+                query = query.Where(isg => isg.ItemGroupID == request.ItemGroupId.Value);
             }
 
             // Apply search filter if provided
@@ -49,7 +50,7 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSub
                 var searchTerm = request.SearchTerm.ToLower();
                 query = query.Where(isg =>
                     isg.Name.ToLower().Contains(searchTerm) ||
-                    isg.Description.ToLower().Contains(searchTerm) ||
+                    (isg.Description != null && isg.Description.ToLower().Contains(searchTerm)) ||
                     isg.ItemGroup.Name.ToLower().Contains(searchTerm));
             }
 
@@ -82,11 +83,15 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSub
             // Project to DTO
             var dtoQuery = query.Select(isg => new ItemSubGroupDto
             {
-                Id = isg.Id,
+                ItemSubGroupID = isg.ItemSubGroupID,
                 Name = isg.Name,
+                Code = isg.Code,
                 Description = isg.Description,
-                ItemGroupId = isg.ItemGroupId,
+                ItemGroupID = isg.ItemGroupID,
                 ItemGroupName = isg.ItemGroup.Name,
+                ItemSubGroupTypeID = isg.ItemSubGroupTypeID,
+                ItemSubGroupTypeName = isg.ItemSubGroupType.Name ?? string.Empty,
+                IsActive = isg.IsActive,
                 CreatedAt = isg.CreatedAt,
                 UpdatedAt = isg.UpdatedAt
             });

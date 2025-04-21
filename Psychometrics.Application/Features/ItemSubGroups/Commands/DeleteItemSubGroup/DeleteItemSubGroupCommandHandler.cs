@@ -1,6 +1,10 @@
+using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
+using Psychometrics.Application.Common.Exceptions;
+using Psychometrics.Domain.Entities;
 
 namespace Psychometrics.Application.Features.ItemSubGroups.Commands.DeleteItemSubGroup;
 
@@ -28,13 +32,15 @@ public class DeleteItemSubGroupCommandHandler : IRequestHandler<DeleteItemSubGro
     /// <returns>True if the ItemSubGroup was deleted, false otherwise</returns>
     public async Task<bool> Handle(DeleteItemSubGroupCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.ItemSubGroups
+        var itemSubGroup = await _context.ItemSubGroups
             .FirstOrDefaultAsync(x => x.ItemSubGroupID == request.ItemSubGroupID, cancellationToken);
 
-        if (entity == null)
-            return false;
+        if (itemSubGroup == null)
+        {
+            throw new NotFoundException(nameof(ItemSubGroup), request.ItemSubGroupID);
+        }
 
-        _context.ItemSubGroups.Remove(entity);
+        _context.ItemSubGroups.Remove(itemSubGroup);
         await _context.SaveChangesAsync(cancellationToken);
 
         return true;

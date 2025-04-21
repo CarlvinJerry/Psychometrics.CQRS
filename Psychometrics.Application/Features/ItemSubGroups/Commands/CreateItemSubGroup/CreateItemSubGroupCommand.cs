@@ -29,13 +29,13 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Commands.CreateItemSu
         public string Code { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the ItemGroup code.
+        /// Gets or sets the ID of the parent ItemGroup.
         /// </summary>
-        public string ItemGroupCode { get; set; } = string.Empty;
+        public Guid ItemGroupID { get; set; }
 
         /// <summary>
-        /// Gets or sets the ItemSubGroupType code.
+        /// Gets or sets the ID of the ItemSubGroupType.
         /// </summary>
-        public string ItemSubGroupTypeCode { get; set; } = string.Empty;
+        public Guid ItemSubGroupTypeID { get; set; }
     }
 } 

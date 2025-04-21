@@ -28,9 +28,9 @@ namespace Psychometrics.Application.Features.Students.Queries.GetAllStudents
                 var searchTerm = request.SearchTerm.ToLower();
                 query = query.Where(s =>
                     s.FirstName.ToLower().Contains(searchTerm) ||
-                    s.LastName.ToLower().Contains(searchTerm) ||
-                    s.Email.ToLower().Contains(searchTerm) ||
-                    s.StudentNumber.ToLower().Contains(searchTerm));
+                    s.Surname.ToLower().Contains(searchTerm) ||
+                    s.EmailAddress.ToLower().Contains(searchTerm) ||
+                    s.CandidateNumber.ToLower().Contains(searchTerm));
             }
 
             // Apply sorting
@@ -41,15 +41,15 @@ namespace Psychometrics.Application.Features.Students.Queries.GetAllStudents
                     "firstname" => request.SortDescending ? 
                         query.OrderByDescending(s => s.FirstName) : 
                         query.OrderBy(s => s.FirstName),
-                    "lastname" => request.SortDescending ? 
-                        query.OrderByDescending(s => s.LastName) : 
-                        query.OrderBy(s => s.LastName),
-                    "email" => request.SortDescending ? 
-                        query.OrderByDescending(s => s.Email) : 
-                        query.OrderBy(s => s.Email),
-                    "studentnumber" => request.SortDescending ? 
-                        query.OrderByDescending(s => s.StudentNumber) : 
-                        query.OrderBy(s => s.StudentNumber),
+                    "surname" => request.SortDescending ? 
+                        query.OrderByDescending(s => s.Surname) : 
+                        query.OrderBy(s => s.Surname),
+                    "emailaddress" => request.SortDescending ? 
+                        query.OrderByDescending(s => s.EmailAddress) : 
+                        query.OrderBy(s => s.EmailAddress),
+                    "candidatenumber" => request.SortDescending ? 
+                        query.OrderByDescending(s => s.CandidateNumber) : 
+                        query.OrderBy(s => s.CandidateNumber),
                     "createdat" => request.SortDescending ? 
                         query.OrderByDescending(s => s.CreatedAt) : 
                         query.OrderBy(s => s.CreatedAt),
@@ -65,14 +65,32 @@ namespace Psychometrics.Application.Features.Students.Queries.GetAllStudents
             // Project to DTO
             var dtoQuery = query.Select(s => new StudentDto
             {
-                Id = s.Id,
+                StudentId = s.StudentId,
+                CandidateNumber = s.CandidateNumber,
+                EmailAddress = s.EmailAddress,
                 FirstName = s.FirstName,
-                LastName = s.LastName,
-                Email = s.Email,
-                PhoneNumber = s.PhoneNumber,
-                DateOfBirth = s.DateOfBirth,
+                Surname = s.Surname,
+                Year = s.Year,
+                YearOfEntry = s.YearOfEntry,
+                SCJCode = s.SCJCode,
+                AcademicYear = s.AcademicYear,
+                Block = s.Block,
+                ProgressCodeName = s.ProgressCodeName,
                 Gender = s.Gender,
-                StudentNumber = s.StudentNumber,
+                AgeOnEntry = s.AgeOnEntry,
+                Ethnicity = s.Ethnicity,
+                Disability = s.Disability,
+                HighestQualificationOnEntry = s.HighestQualificationOnEntry,
+                RegionofDomicile = s.RegionofDomicile,
+                Religion = s.Religion,
+                SocioEconomicClass = s.SocioEconomicClass,
+                PersonalTutor = s.PersonalTutor,
+                ExternalTutorEmail = s.ExternalTutorEmail,
+                HomeAddress = s.HomeAddress,
+                LocalNonLocalWP = s.LocalNonLocalWP,
+                DANU = s.DANU,
+                Notes = s.Notes,
+                IsActive = s.IsActive,
                 CreatedAt = s.CreatedAt,
                 UpdatedAt = s.UpdatedAt
             });

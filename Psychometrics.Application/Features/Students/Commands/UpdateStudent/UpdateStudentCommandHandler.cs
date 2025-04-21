@@ -5,11 +5,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
 using Psychometrics.Application.Exceptions;
+using Psychometrics.Domain.Entities;
+using Psychometrics.Application.Common.Exceptions;
 
 namespace Psychometrics.Application.Features.Students.Commands.UpdateStudent
 {
     /// <summary>
-    /// Handler for updating a Student
+    /// Handler for the UpdateStudentCommand
     /// </summary>
     public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand, bool>
     {
@@ -25,23 +27,46 @@ namespace Psychometrics.Application.Features.Students.Commands.UpdateStudent
         }
 
         /// <summary>
-        /// Handles the request to update a Student
+        /// Handles the UpdateStudentCommand
         /// </summary>
-        /// <param name="request">The command request</param>
+        /// <param name="request">The update student command</param>
         /// <param name="cancellationToken">The cancellation token</param>
-        /// <returns>True if the Student was updated, false otherwise</returns>
+        /// <returns>A boolean indicating whether the update was successful</returns>
         public async Task<bool> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Students
-                .FirstOrDefaultAsync(x => x.StudentID == request.StudentID, cancellationToken);
+            var student = await _context.Students
+                .FirstOrDefaultAsync(s => s.StudentId == request.StudentId, cancellationToken);
 
-            if (entity == null)
-                return false;
+            if (student == null)
+            {
+                throw new NotFoundException(nameof(Student), request.StudentId);
+            }
 
-            entity.FirstName = request.FirstName;
-            entity.LastName = request.LastName;
-            entity.Email = request.Email;
-            entity.UpdatedAt = DateTime.UtcNow;
+            student.CandidateNumber = request.CandidateNumber;
+            student.FirstName = request.FirstName;
+            student.Surname = request.Surname;
+            student.EmailAddress = request.EmailAddress;
+            student.Year = request.Year;
+            student.YearOfEntry = request.YearOfEntry;
+            student.SCJCode = request.SCJCode;
+            student.AcademicYear = request.AcademicYear;
+            student.Block = request.Block;
+            student.ProgressCodeName = request.ProgressCodeName;
+            student.Gender = request.Gender;
+            student.AgeOnEntry = request.AgeOnEntry;
+            student.Ethnicity = request.Ethnicity;
+            student.Disability = request.Disability;
+            student.HighestQualificationOnEntry = request.HighestQualificationOnEntry;
+            student.RegionofDomicile = request.RegionofDomicile;
+            student.Religion = request.Religion;
+            student.SocioEconomicClass = request.SocioEconomicClass;
+            student.PersonalTutor = request.PersonalTutor;
+            student.ExternalTutorEmail = request.ExternalTutorEmail;
+            student.HomeAddress = request.HomeAddress;
+            student.LocalNonLocalWP = request.LocalNonLocalWP;
+            student.DANU = request.DANU;
+            student.Notes = request.Notes;
+            student.UpdatedAt = System.DateTime.UtcNow;
 
             await _context.SaveChangesAsync(cancellationToken);
 

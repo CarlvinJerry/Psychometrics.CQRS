@@ -13,12 +13,12 @@ namespace Psychometrics.Application.Features.Students.Queries.GetAllStudents
         /// <summary>
         /// Gets or sets the search term to filter students.
         /// </summary>
-        public string SearchTerm { get; set; }
+        public string? SearchTerm { get; set; }
 
         /// <summary>
         /// Gets or sets the property name to sort by.
         /// </summary>
-        public string SortBy { get; set; }
+        public string? SortBy { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to sort in descending order.

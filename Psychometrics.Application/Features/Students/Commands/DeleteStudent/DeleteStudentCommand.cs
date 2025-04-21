@@ -11,6 +11,6 @@ namespace Psychometrics.Application.Features.Students.Commands.DeleteStudent
         /// <summary>
         /// Gets or sets the ID of the Student to delete
         /// </summary>
-        public Guid StudentID { get; set; }
+        public Guid StudentId { get; set; }
     }
 } 

@@ -28,14 +28,29 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSub
         public string Code { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the ItemGroup code.
+        /// Gets or sets the ID of the parent ItemGroup.
         /// </summary>
-        public string ItemGroupCode { get; set; } = string.Empty;
+        public Guid ItemGroupID { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the parent ItemGroup.
         /// </summary>
         public string ItemGroupName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the ID of the ItemSubGroupType.
+        /// </summary>
+        public Guid ItemSubGroupTypeID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the ItemSubGroupType.
+        /// </summary>
+        public string ItemSubGroupTypeName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets whether the ItemSubGroup is active.
+        /// </summary>
+        public bool IsActive { get; set; }
 
         /// <summary>
         /// Gets or sets the creation timestamp of the ItemSubGroup.

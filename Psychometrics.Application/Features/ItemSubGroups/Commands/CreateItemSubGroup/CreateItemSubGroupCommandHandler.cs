@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
@@ -23,10 +22,18 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Commands.CreateItemSu
         {
             // Validate that ItemGroup exists
             var itemGroup = await _context.ItemGroups
-                .FirstOrDefaultAsync(ig => ig.Code == request.ItemGroupCode, cancellationToken);
+                .FirstOrDefaultAsync(ig => ig.ItemGroupID == request.ItemGroupID, cancellationToken);
             if (itemGroup == null)
             {
-                throw new NotFoundException(nameof(ItemGroup), request.ItemGroupCode);
+                throw new NotFoundException(nameof(ItemGroup), request.ItemGroupID);
+            }
+
+            // Validate that ItemSubGroupType exists
+            var itemSubGroupType = await _context.ItemSubGroupTypes
+                .FirstOrDefaultAsync(ist => ist.ItemSubGroupTypeID == request.ItemSubGroupTypeID, cancellationToken);
+            if (itemSubGroupType == null)
+            {
+                throw new NotFoundException(nameof(ItemSubGroupType), request.ItemSubGroupTypeID);
             }
 
             var itemSubGroup = new ItemSubGroup
@@ -35,8 +42,9 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Commands.CreateItemSu
                 Name = request.Name,
                 Code = request.Code,
                 Description = request.Description,
-                ItemGroupCode = request.ItemGroupCode,
-                ItemSubGroupTypeCode = request.ItemSubGroupTypeCode,
+                ItemGroupID = request.ItemGroupID,
+                ItemSubGroupTypeID = request.ItemSubGroupTypeID,
+                IsActive = true,
                 CreatedAt = DateTime.UtcNow
             };
 

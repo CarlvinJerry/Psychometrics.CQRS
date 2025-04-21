@@ -1,4 +1,5 @@
 using MediatR;
+using System;
 using Psychometrics.Application.Common.Models;
 
 namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSubGroups
@@ -11,12 +12,12 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSub
         /// <summary>
         /// Gets or sets the search term to filter ItemSubGroups.
         /// </summary>
-        public string SearchTerm { get; set; }
+        public string? SearchTerm { get; set; }
 
         /// <summary>
         /// Gets or sets the property name to sort by.
         /// </summary>
-        public string SortBy { get; set; }
+        public string? SortBy { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to sort in descending order.

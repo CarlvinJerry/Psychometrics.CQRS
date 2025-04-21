@@ -1,9 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Psychometrics.Domain.Entities
 {
+    [Index(nameof(Code), IsUnique = true)]
     public class ItemSubGroup
     {
         [Key]
@@ -16,7 +18,6 @@ namespace Psychometrics.Domain.Entities
 
         [Required(ErrorMessage = "Item Group Code is a required field.")]
         [MaxLength(50, ErrorMessage = "Maximum length for Item Type Name is 60 characters.")]
-        [Index(IsUnique = true)]
         public string Code { get; set; }
 
         [MaxLength(60, ErrorMessage = "Maximum length for the Name is 200 characters.")]

@@ -12,6 +12,6 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetItemSubGro
         /// <summary>
         /// Gets or sets the ID of the ItemSubGroup to retrieve.
         /// </summary>
-        public Guid ItemSubGroupId { get; set; }
+        public Guid ItemSubGroupID { get; set; }
     }
 } 

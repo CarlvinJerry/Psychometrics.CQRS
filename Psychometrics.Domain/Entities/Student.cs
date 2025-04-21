@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Psychometrics.Domain.Entities
 {
+    [Index(nameof(CandidateNumber), IsUnique = true)]
     public class Student
     {
         [Key]
@@ -13,7 +15,6 @@ namespace Psychometrics.Domain.Entities
 
         [Required(ErrorMessage = "Candidate Number is a required field.")]
         [MaxLength(10, ErrorMessage = "Maximum length for Candidate Number is 10 characters.")]
-        [Index(IsUnique = true)]
         public string CandidateNumber { get; set; }
 
         [Required(ErrorMessage = "Email Address is a required field.")]

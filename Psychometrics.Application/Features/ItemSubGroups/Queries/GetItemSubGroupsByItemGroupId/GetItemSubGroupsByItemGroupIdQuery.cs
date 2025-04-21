@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
+using Psychometrics.Application.Common.DTOs;
 using Psychometrics.Application.Features.ItemSubGroups.Queries.GetAllItemSubGroups;
-using Psychometrics.Domain.Entities;
-using Psychometrics.Application.Common.Exceptions;
 
 namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetItemSubGroupsByItemGroupId
 {
@@ -18,9 +18,9 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetItemSubGro
     public class GetItemSubGroupsByItemGroupIdQuery : IRequest<List<ItemSubGroupDto>>
     {
         /// <summary>
-        /// Gets or sets the code of the ItemGroup to filter by.
+        /// Gets or sets the ID of the ItemGroup to filter by.
         /// </summary>
-        public string ItemGroupCode { get; set; } = string.Empty;
+        public Guid ItemGroupID { get; set; }
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetItemSubGro
         /// <summary>
         /// Handles the retrieval of ItemSubGroups for a specific ItemGroup.
         /// </summary>
-        /// <param name="request">The query containing the ItemGroup code.</param>
+        /// <param name="request">The query containing the ItemGroup ID.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of ItemSubGroupDto objects.</returns>
         public async Task<List<ItemSubGroupDto>> Handle(GetItemSubGroupsByItemGroupIdQuery request, CancellationToken cancellationToken)
@@ -53,7 +53,7 @@ namespace Psychometrics.Application.Features.ItemSubGroups.Queries.GetItemSubGro
             var itemSubGroups = await _context.ItemSubGroups
                 .Include(isg => isg.ItemGroup)
                 .Include(isg => isg.ItemSubGroupType)
-                .Where(isg => isg.ItemGroupCode == request.ItemGroupCode)
+                .Where(isg => isg.ItemGroupID == request.ItemGroupID)
                 .ToListAsync(cancellationToken);
 
             return _mapper.Map<List<ItemSubGroupDto>>(itemSubGroups);

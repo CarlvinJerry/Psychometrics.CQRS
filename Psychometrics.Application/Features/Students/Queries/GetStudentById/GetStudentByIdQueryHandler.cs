@@ -1,19 +1,23 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
+using Psychometrics.Application.Common.Exceptions;
 
 namespace Psychometrics.Application.Features.Students.Queries.GetStudentById
 {
     public class GetStudentByIdQueryHandler : IRequestHandler<GetStudentByIdQuery, StudentDto>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GetStudentByIdQueryHandler(IApplicationDbContext context)
+        public GetStudentByIdQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<StudentDto> Handle(GetStudentByIdQuery request, CancellationToken cancellationToken)
@@ -23,23 +27,10 @@ namespace Psychometrics.Application.Features.Students.Queries.GetStudentById
 
             if (student == null)
             {
-                return null;
+                throw new NotFoundException(nameof(Student), request.StudentId);
             }
 
-            return new StudentDto
-            {
-                StudentId = student.StudentId,
-                FirstName = student.FirstName,
-                LastName = student.LastName,
-                Email = student.Email,
-                PhoneNumber = student.PhoneNumber,
-                DateOfBirth = student.DateOfBirth,
-                Gender = student.Gender,
-                Address = student.Address,
-                City = student.City,
-                Country = student.Country,
-                PostalCode = student.PostalCode
-            };
+            return _mapper.Map<StudentDto>(student);
         }
     }
 } 

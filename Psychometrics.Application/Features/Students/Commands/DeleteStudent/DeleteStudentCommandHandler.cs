@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Psychometrics.Application.Common.Interfaces;
-using Psychometrics.Application.Exceptions;
+using Psychometrics.Application.Common.Exceptions;
 
 namespace Psychometrics.Application.Features.Students.Commands.DeleteStudent
 {
@@ -31,13 +31,15 @@ namespace Psychometrics.Application.Features.Students.Commands.DeleteStudent
         /// <returns>True if the Student was deleted, false otherwise</returns>
         public async Task<bool> Handle(DeleteStudentCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Students
-                .FirstOrDefaultAsync(x => x.StudentID == request.StudentID, cancellationToken);
+            var student = await _context.Students
+                .FirstOrDefaultAsync(s => s.StudentId == request.StudentId, cancellationToken);
 
-            if (entity == null)
-                return false;
+            if (student == null)
+            {
+                throw new NotFoundException(nameof(Student), request.StudentId);
+            }
 
-            _context.Students.Remove(entity);
+            _context.Students.Remove(student);
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;
